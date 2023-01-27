@@ -46,6 +46,11 @@ class="sidebar-mini-hide">{{__('Planım')}}</span></a>
     class="sidebar-mini-hide">{{__('Ajanda')}}</span></a>
 </li>
 <li>
+    <a href="{{url('admin?t=dijiayna')}}"><i class="si si-calculator"></i><span
+    class="sidebar-mini-hide">{{__('DijiAyna')}}</span></a>
+</li>
+
+<li>
     <a href="{{url('admin?t=soru-takibi')}}"><i class="fa fa-question-circle"></i><span
     class="sidebar-mini-hide">{{__('Soru Takibi')}}</span></a>
 </li>
