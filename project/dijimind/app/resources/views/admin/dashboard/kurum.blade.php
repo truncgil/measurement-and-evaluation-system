@@ -199,6 +199,7 @@ taksonomi([
     
 ?>
 <?php $soru_sayisi = soru_sayisi($u->alias_ids); 
+//dump($soru_sayisi);
 $soru_sayisi['puan_ort'] = round($soru_sayisi['puan_ort'],4);
 //print2($soru_sayisi);
 

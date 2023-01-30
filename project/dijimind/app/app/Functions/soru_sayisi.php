@@ -54,6 +54,8 @@ function soru_sayisi($ids="") {
             $dizi['toplam'] += $alan['dogru'] + $alan['yanlis'] + $alan['bos'];
             if($s->tyt!="") {
                 $dizi['puanlar'][$s->title] = $s->tyt;
+
+                $dizi['puanlar_tyt_all'][$s->title][] = $s->tyt; 
                 $dizi['puanlar_tyt'][$s->title] = $s->tyt;
                 $dizi['siralama'][$s->title] = siralama($s->tyt);
                 $dizi['siralama_tyt'][$s->title] = siralama($s->tyt);
@@ -66,6 +68,7 @@ function soru_sayisi($ids="") {
                 
             } elseif($s->lgs!="") {
                 $dizi['puanlar'][$s->title] = $s->lgs;
+                $dizi['puanlar_lgs_all'][$s->title][] = $s->lgs; 
                 $dizi['puanlar_lgs'][$s->title] = $s->lgs;
                 $dizi['siralama'][$s->title] = siralama($s->lgs);
                 $dizi['siralama_lgs'][$s->title] = siralama($s->lgs);
@@ -78,14 +81,17 @@ function soru_sayisi($ids="") {
             if(strpos($s->title,"AYT") !== false) {
                 if((int) $s->yks_say != 0) {
                     $dizi['siralama_ayt_say'][$s->title] = siralama($s->yks_say,"yks_say");
+                    $dizi['puanlar_ayt_say_all'][$s->title][] = $s->yks_say; 
                     $dizi['puanlar_ayt_say'][$s->title] =$s->yks_say;
                 }
                 if((int) $s->yks_soz != 0) {
                     $dizi['siralama_ayt_soz'][$s->title] = siralama($s->yks_soz,"yks_soz");
+                    $dizi['puanlar_ayt_soz_all'][$s->title][] = $s->yks_soz; 
                     $dizi['puanlar_ayt_soz'][$s->title] =$s->yks_soz;
                 }
                 if((int) $s->yks_ea != 0) {
                     $dizi['siralama_ayt_ea'][$s->title] = siralama($s->yks_ea,"yks_ea");
+                    $dizi['puanlar_ayt_ea_all'][$s->title][] = $s->yks_ea; 
                     $dizi['puanlar_ayt_ea'][$s->title] =$s->yks_ea;
                 }
                 
@@ -111,6 +117,24 @@ function soru_sayisi($ids="") {
         }
         
     }
+
+    //refactoring avg
+    $refactoring_columns = [
+            'puanlar_tyt_all',
+            'puanlar_lgs_all',
+            'puanlar_ayt_say_all',
+            'puanlar_ayt_soz_all',
+            'puanlar_ayt_ea_all',
+    ];
+
+    foreach($refactoring_columns AS $refactoring_column) {
+        foreach($dizi[$refactoring_column] AS $sinav => $puan) {
+            $avg_column = str_replace("_all", "", $refactoring_column);
+            $dizi[$avg_column][$sinav] = array_sum($puan) / count($puan);
+        }
+    }
+    
+
     $dizi['puan_ort'] = avg($dizi['puanlar']);
     if($dizi['puan_ort']==0) $dizi['puan_ort'] = "-";
     return $dizi;

@@ -38,6 +38,10 @@ class="sidebar-mini-hide">{{__('KAS Sınavlarım')}}</span></a>
     class="sidebar-mini-hide">{{__('Ajanda')}}</span></a>
 </li>
 <li>
+    <a href="{{url('admin?t=dijiayna')}}"><i class="si si-calculator"></i><span
+    class="sidebar-mini-hide">{{__('DijiAyna')}}</span></a>
+</li>
+<li>
     <a href="{{url('admin?t=dijichat')}}"><i class="fa fa-question-circle"></i><span
     class="sidebar-mini-hide">{{__('DijiChat')}}</span></a>
 </li>
