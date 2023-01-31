@@ -115,7 +115,9 @@ $sonuclar = db("sonuclar")
                     <td>{{$s->il_sira}}</td>
                     <td>{{$s->genel_sira}}</td>
                 </tr> 
-                <?php $k++; } ?>
+                <?php $k++; } 
+                $k --;
+                ?>
                 <tr>
                     <th>{{e2("Ortalama")}}</th>
                     <?php foreach($toplam AS $alan => $deger)  { 
