@@ -135,9 +135,13 @@ function soru_sayisi($ids="") {
     foreach($refactoring_columns AS $refactoring_column) {
         foreach($dizi[$refactoring_column] AS $sinav => $puan) {
             $avg_column = str_replace("_all", "", $refactoring_column);
+            $type_column = str_replace("puanlar_","",$avg_column);
             $dizi[$avg_column][$sinav] = array_sum($puan) / count($puan);
+            $dizi["siralama_" . $type_column][$sinav] = siralama($dizi[$avg_column][$sinav]);
         }
     }
+
+   // dd($dizi);
     
 
     $dizi['puan_ort'] = avg($dizi['puanlar']);
