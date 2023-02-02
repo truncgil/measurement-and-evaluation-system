@@ -70,17 +70,27 @@ if(getisset("ogrenci")) {
       <?php 
       try {
          $sonuc = db("sonuclar")
+            ->join("users","sonuclar.uid","users.id")
+            ->select(
+               "title",
+               "sonuclar.created_at",
+               "kitapcik",
+               "analiz",
+               "sorular",
+               "name",
+               "surname",
+               )
             ->where("title","NOT LIKE","%KAS Sınavı%");
            
 
             if($u->level=="Öğrenci") {
-               $sonuc = $sonuc->where("uid",$u->id);
+               $sonuc = $sonuc->where("sonuclar.uid",$u->id);
             } else {
-               $sonuc = $sonuc->whereIn("uid",$u->alias_ids);
+               $sonuc = $sonuc->whereIn("sonuclar.uid",$u->alias_ids);
             }
 
          if(getisset("id")) {
-            $sonuc = $sonuc->where("id",get("id"));
+            $sonuc = $sonuc->where("sonuclar.id",get("id"));
          }
 
          if(getisset("sinav")) {
@@ -88,15 +98,15 @@ if(getisset("ogrenci")) {
          }
 
          if(!getesit("start","")) {
-            $sonuc = $sonuc->whereDate("created_at",">=",get("start"));
+            $sonuc = $sonuc->whereDate("sonuclar.created_at",">=",get("start"));
          }
         
          if(!getesit("end","")) {
-            $sonuc = $sonuc->whereDate("created_at","<=",get("end"));
+            $sonuc = $sonuc->whereDate("sonuclar.created_at","<=",get("end"));
          }
         
          if(getisset("ogrenci")) {
-            $sonuc = $sonuc->whereIn("uid",$selectOgrenci);
+            $sonuc = $sonuc->whereIn("sonuclar.uid",$selectOgrenci);
          }
 
          $sonuclar = $sonuc->simplePaginate(20);
@@ -112,6 +122,10 @@ if(getisset("ogrenci")) {
                      <tr>
                            <th style="width: 30px;"># </th>
                            <th>Sınav Adı</th>
+                           <?php if($u->level!="Öğrenci")  { 
+                             ?>
+                            <th>Öğrenci Adı</th> 
+                            <?php } ?>
                            <th class="d-none d-sm-table-cell" style="width: 20%;">Kitapçık</th>
                            <th class="d-none d-sm-table-cell" style="width: 20%;">Soru No</th>
                            <th class="d-none d-sm-table-cell" style="width: 20%;">Durum</th>
@@ -124,6 +138,10 @@ if(getisset("ogrenci")) {
                               <i class="fa fa-angle-right"></i>
                            </td>
                            <td class="font-w600">{{$sonuc->title}}</td>
+                           <?php if($u->level!="Öğrenci")  { 
+                             ?>
+                            <td>{{$sonuc->name}} {{$sonuc->surname}}</td> 
+                            <?php } ?>
                            <td>
                               <span class="badge badge-warning">{{$sonuc->kitapcik}}</span>
                            </td>
